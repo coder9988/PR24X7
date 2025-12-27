@@ -23,25 +23,57 @@ const fallbackServices = [
   },
   {
     _id: '2',
-    title: 'Crisis Management',
-    slug: 'crisis-management',
-    description: 'Protect your reputation during challenging times with strategic crisis communication and rapid response protocols.',
-    icon: '🛡️',
+    title: 'Brand Management',
+    slug: 'brand-management',
+    description: 'Develop and maintain a consistent brand identity that resonates with your target audience.',
+    icon: '🎯',
     features: [
-      'Crisis communication strategy',
-      'Rapid response team',
-      'Reputation repair',
-      'Stakeholder communication',
-      'Post-crisis analysis'
+      'Brand strategy development',
+      'Visual identity design',
+      'Brand guidelines creation',
+      'Brand voice development',
+      'Consistent messaging across platforms'
     ],
     order: 2,
     isActive: true
   },
   {
     _id: '3',
+    title: 'Strategic Communications',
+    slug: 'strategic-communications',
+    description: 'Craft compelling narratives and messaging strategies that drive engagement and action.',
+    icon: '📢',
+    features: [
+      'Message development',
+      'Storytelling techniques',
+      'Audience analysis',
+      'Communication planning',
+      'Performance measurement'
+    ],
+    order: 3,
+    isActive: true
+  },
+  {
+    _id: '4',
+    title: 'Content Creation',
+    slug: 'content-creation',
+    description: 'Produce high-quality content including press releases, articles, and thought leadership pieces.',
+    icon: '✍️',
+    features: [
+      'Press release writing',
+      'Blog content creation',
+      'Thought leadership articles',
+      'Social media content',
+      'Video script development'
+    ],
+    order: 4,
+    isActive: true
+  },
+  {
+    _id: '5',
     title: 'Digital PR',
     slug: 'digital-pr',
-    description: 'Amplify your online presence through strategic digital campaigns, influencer partnerships, and content marketing.',
+    description: 'Leverage digital channels to amplify your message and reach your audience where they are.',
     icon: '💻',
     features: [
       'Social media strategy',
@@ -50,7 +82,23 @@ const fallbackServices = [
       'Online reputation management',
       'SEO and content optimization'
     ],
-    order: 3,
+    order: 5,
+    isActive: true
+  },
+  {
+    _id: '6',
+    title: 'Crisis Management',
+    slug: 'crisis-management',
+    description: 'Navigate challenging situations with strategic communication and reputation protection.',
+    icon: '🛡️',
+    features: [
+      'Crisis communication strategy',
+      'Rapid response team',
+      'Reputation repair',
+      'Stakeholder communication',
+      'Post-crisis analysis'
+    ],
+    order: 6,
     isActive: true
   }
 ]

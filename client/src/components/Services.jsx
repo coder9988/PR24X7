@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef } from 'react'
+import { Link } from 'react-router-dom'
 import { 
   Megaphone, 
   Users, 
@@ -23,6 +24,7 @@ const Services = () => {
       description: 'Build strong relationships with journalists and secure top-tier media coverage for your brand.',
       color: 'from-primary-500 to-primary-600',
       delay: 0,
+      slug: 'media-relations',
     },
     {
       icon: Users,
@@ -30,6 +32,7 @@ const Services = () => {
       description: 'Develop and maintain a consistent brand identity that resonates with your target audience.',
       color: 'from-accent-500 to-accent-600',
       delay: 0.1,
+      slug: 'brand-management',
     },
     {
       icon: TrendingUp,
@@ -37,6 +40,7 @@ const Services = () => {
       description: 'Craft compelling narratives and messaging strategies that drive engagement and action.',
       color: 'from-primary-500 to-accent-500',
       delay: 0.2,
+      slug: 'strategic-communications',
     },
     {
       icon: FileText,
@@ -44,6 +48,7 @@ const Services = () => {
       description: 'Produce high-quality content including press releases, articles, and thought leadership pieces.',
       color: 'from-accent-500 to-primary-500',
       delay: 0.3,
+      slug: 'content-creation',
     },
     {
       icon: Globe,
@@ -51,6 +56,7 @@ const Services = () => {
       description: 'Leverage digital channels to amplify your message and reach your audience where they are.',
       color: 'from-primary-500 to-primary-700',
       delay: 0.4,
+      slug: 'digital-pr',
     },
     {
       icon: Target,
@@ -58,6 +64,7 @@ const Services = () => {
       description: 'Navigate challenging situations with strategic communication and reputation protection.',
       color: 'from-accent-500 to-accent-700',
       delay: 0.5,
+      slug: 'crisis-management',
     },
   ]
 
@@ -145,19 +152,24 @@ const Services = () => {
                 </p>
                 
                 {/* Hover Arrow */}
-                <motion.div
-                  initial={{ x: -10, opacity: 0 }}
-                  whileHover={{ x: 0, opacity: 1 }}
-                  className="text-primary-600 font-semibold flex items-center gap-2"
+                <Link
+                  to={`/services/${service.slug}`}
+                  className="inline-block"
                 >
-                  Learn More
-                  <motion.span
-                    animate={{ x: [0, 5, 0] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
+                  <motion.div
+                    initial={{ x: -10, opacity: 0 }}
+                    whileHover={{ x: 0, opacity: 1 }}
+                    className="text-primary-600 font-semibold flex items-center gap-2 cursor-pointer"
                   >
-                    →
-                  </motion.span>
-                </motion.div>
+                    Learn More
+                    <motion.span
+                      animate={{ x: [0, 5, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                    >
+                      →
+                    </motion.span>
+                  </motion.div>
+                </Link>
               </motion.div>
             )
           })}

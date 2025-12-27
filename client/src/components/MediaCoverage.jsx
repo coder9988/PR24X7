@@ -9,37 +9,37 @@ const MediaCoverage = () => {
   const mediaOutlets = [
     {
       name: 'Forbes',
-      logo: 'https://via.placeholder.com/200x100/000000/ffffff?text=Forbes',
+      logo: 'https://images.unsplash.com/photo-1611224943852-8d76329e1eb3?w=200&h=100&fit=crop&auto=format',
       description: 'Featured in Forbes for innovative PR strategies',
       link: '#',
     },
     {
       name: 'TechCrunch',
-      logo: 'https://via.placeholder.com/200x100/00a562/ffffff?text=TechCrunch',
+      logo: 'https://images.unsplash.com/photo-1557804218-c57a286f0dc4?w=200&h=100&fit=crop&auto=format',
       description: 'Coverage of our tech client launches',
       link: '#',
     },
     {
       name: 'The New York Times',
-      logo: 'https://via.placeholder.com/200x100/000000/ffffff?text=NY+Times',
+      logo: 'https://images.unsplash.com/photo-1486312338008-5cc8c4b35a9?w=200&h=100&fit=crop&auto=format',
       description: 'Major feature story placement',
       link: '#',
     },
     {
       name: 'Bloomberg',
-      logo: 'https://via.placeholder.com/200x100/000000/ffffff?text=Bloomberg',
+      logo: 'https://images.unsplash.com/photo-1611974289855-9c2b0d63dd6?w=200&h=100&fit=crop&auto=format',
       description: 'Business news coverage',
       link: '#',
     },
     {
       name: 'Vogue',
-      logo: 'https://via.placeholder.com/200x100/000000/ffffff?text=Vogue',
+      logo: 'https://images.unsplash.com/photo-1441986300917-64674bd228d2?w=200&h=100&fit=crop&auto=format',
       description: 'Fashion brand feature',
       link: '#',
     },
     {
       name: 'Harvard Business Review',
-      logo: 'https://via.placeholder.com/200x100/000000/ffffff?text=HBR',
+      logo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=100&fit=crop&auto=format',
       description: 'Thought leadership article',
       link: '#',
     },

@@ -6,14 +6,14 @@ const TrustedByBrands = () => {
   const sectionRef = useRef(null)
 
   const brands = [
-    { name: 'TechCorp', logo: 'https://via.placeholder.com/150x80/0ea5e9/ffffff?text=TechCorp' },
-    { name: 'FashionHub', logo: 'https://via.placeholder.com/150x80/d946ef/ffffff?text=FashionHub' },
-    { name: 'FoodieBrand', logo: 'https://via.placeholder.com/150x80/0ea5e9/ffffff?text=FoodieBrand' },
-    { name: 'HealthPlus', logo: 'https://via.placeholder.com/150x80/d946ef/ffffff?text=HealthPlus' },
-    { name: 'FinancePro', logo: 'https://via.placeholder.com/150x80/0ea5e9/ffffff?text=FinancePro' },
-    { name: 'EduTech', logo: 'https://via.placeholder.com/150x80/d946ef/ffffff?text=EduTech' },
-    { name: 'GreenLife', logo: 'https://via.placeholder.com/150x80/0ea5e9/ffffff?text=GreenLife' },
-    { name: 'MediaMax', logo: 'https://via.placeholder.com/150x80/d946ef/ffffff?text=MediaMax' },
+    { name: 'TechCorp', logo: 'https://images.unsplash.com/photo-1562577187-c316b05c6fa5?w=150&h=80&fit=crop&auto=format' },
+    { name: 'FashionHub', logo: 'https://images.unsplash.com/photo-1441986300917-64674bd228d2?w=150&h=80&fit=crop&auto=format' },
+    { name: 'FoodieBrand', logo: 'https://images.unsplash.com/photo-1556909058-7f7b972584c7?w=150&h=80&fit=crop&auto=format' },
+    { name: 'HealthPlus', logo: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=150&h=80&fit=crop&auto=format' },
+    { name: 'FinancePro', logo: 'https://images.unsplash.com/photo-1611974289855-9c2b0d63dd6?w=150&h=80&fit=crop&auto=format' },
+    { name: 'EduTech', logo: 'https://images.unsplash.com/photo-1501505907466-5674a12d3aa1?w=150&h=80&fit=crop&auto=format' },
+    { name: 'GreenLife', logo: 'https://images.unsplash.com/photo-1542601906-a0b8e4c029a?w=150&h=80&fit=crop&auto=format' },
+    { name: 'MediaMax', logo: 'https://images.unsplash.com/photo-1596528937114-4b1c8f66459e?w=150&h=80&fit=crop&auto=format' },
   ]
 
   // Duplicate brands for seamless loop

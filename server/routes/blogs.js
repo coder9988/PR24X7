@@ -23,6 +23,7 @@ const fallbackBlogs = [
     author: 'PR Agency Team',
     tags: ['AI', 'Automation', 'Innovation', 'Technology'],
     category: 'PR Strategy',
+    relatedService: 'strategic-communications',
     featured: true,
     published: true,
     seoTitle: 'The Future of PR: AI and Automation in Public Relations | PR Agency',
@@ -51,6 +52,7 @@ const fallbackBlogs = [
     author: 'PR Agency Team',
     tags: ['Crisis Management', 'Digital PR', 'Communication Strategy'],
     category: 'Crisis Management',
+    relatedService: 'crisis-management',
     featured: false,
     published: true,
     seoTitle: 'Crisis Communication in the Digital Age: Best Practices | PR Agency',
@@ -79,6 +81,7 @@ const fallbackBlogs = [
     author: 'PR Agency Team',
     tags: ['Thought Leadership', 'Brand Building', 'Content Strategy', 'Authority'],
     category: 'Brand Building',
+    relatedService: 'brand-management',
     featured: true,
     published: true,
     seoTitle: 'Building Brand Authority Through Thought Leadership | PR Agency',
@@ -88,8 +91,156 @@ const fallbackBlogs = [
     publishedAt: new Date('2024-01-08'),
     createdAt: new Date('2024-01-08'),
     updatedAt: new Date('2024-01-08')
+  },
+  {
+    _id: '4',
+    title: 'Effective Press Release Writing for Modern Media',
+    slug: 'effective-press-release-writing-modern-media',
+    content: `<p>Press releases remain a fundamental tool in public relations, but their format and distribution have evolved significantly.</p>
+    <p>Today's press releases need to be optimized for digital consumption, search engines, and social media sharing.</p>
+    <h3>Modern Press Release Best Practices</h3>
+    <ul>
+      <li>Compelling headlines and subject lines</li>
+      <li>SEO-friendly formatting and keywords</li>
+      <li>Mobile-optimized content structure</li>
+      <li>Multimedia elements and social sharing</li>
+    </ul>`,
+    excerpt: 'Press releases remain a fundamental tool in public relations, but their format and distribution have evolved significantly.',
+    image: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=400&fit=crop',
+    author: 'PR Agency Team',
+    tags: ['Press Release', 'Media Relations', 'Content Creation', 'SEO'],
+    category: 'Media Relations',
+    relatedService: 'media-relations',
+    featured: false,
+    published: true,
+    seoTitle: 'Effective Press Release Writing for Modern Media | PR Agency',
+    seoDescription: 'Master the art of writing press releases that get attention in today\'s digital media landscape.',
+    seoKeywords: ['press release writing', 'media relations', 'PR content', 'digital PR'],
+    readTime: 8,
+    publishedAt: new Date('2024-01-05'),
+    createdAt: new Date('2024-01-05'),
+    updatedAt: new Date('2024-01-05')
+  },
+  {
+    _id: '5',
+    title: 'Content Marketing Strategies for PR Success',
+    slug: 'content-marketing-strategies-pr-success',
+    content: `<p>Content marketing has become an integral part of modern public relations strategies.</p>
+    <p>By creating valuable, relevant content, PR professionals can build relationships with journalists and directly engage target audiences.</p>
+    <h3>Essential Content Types for PR</h3>
+    <ul>
+      <li>Thought leadership articles and whitepapers</li>
+      <li>Case studies and success stories</li>
+      <li>Infographics and visual content</li>
+      <li>Video content and podcasts</li>
+    </ul>`,
+    excerpt: 'Content marketing has become an integral part of modern public relations strategies.',
+    image: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=400&fit=crop',
+    author: 'PR Agency Team',
+    tags: ['Content Marketing', 'Content Creation', 'PR Strategy', 'Digital Marketing'],
+    category: 'PR Strategy',
+    relatedService: 'content-creation',
+    featured: true,
+    published: true,
+    seoTitle: 'Content Marketing Strategies for PR Success | PR Agency',
+    seoDescription: 'Discover how content marketing can enhance your PR efforts and build meaningful audience relationships.',
+    seoKeywords: ['content marketing', 'PR content', 'content strategy', 'digital marketing'],
+    readTime: 6,
+    publishedAt: new Date('2024-01-12'),
+    createdAt: new Date('2024-01-12'),
+    updatedAt: new Date('2024-01-12')
+  },
+  {
+    _id: '6',
+    title: 'Digital PR: Leveraging Social Media for Brand Awareness',
+    slug: 'digital-pr-social-media-brand-awareness',
+    content: `<p>Digital PR has transformed how brands connect with their audiences and manage their reputation online.</p>
+    <p>Social media platforms offer unprecedented opportunities for real-time engagement, crisis management, and brand storytelling.</p>
+    <h3>Digital PR Best Practices</h3>
+    <ul>
+      <li>Consistent brand voice across platforms</li>
+      <li>Real-time engagement and community building</li>
+      <li>Influencer partnerships and collaborations</li>
+      <li>Data-driven strategy optimization</li>
+    </ul>`,
+    excerpt: 'Digital PR has transformed how brands connect with their audiences and manage their reputation online.',
+    image: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800&h=400&fit=crop',
+    author: 'PR Agency Team',
+    tags: ['Digital PR', 'Social Media', 'Brand Awareness', 'Online Marketing'],
+    category: 'Digital Marketing',
+    relatedService: 'digital-pr',
+    featured: false,
+    published: true,
+    seoTitle: 'Digital PR: Leveraging Social Media for Brand Awareness | PR Agency',
+    seoDescription: 'Learn how to leverage digital PR and social media to build brand awareness and engage your audience.',
+    seoKeywords: ['digital PR', 'social media marketing', 'brand awareness', 'online reputation'],
+    readTime: 7,
+    publishedAt: new Date('2024-01-18'),
+    createdAt: new Date('2024-01-18'),
+    updatedAt: new Date('2024-01-18')
   }
 ]
+
+// GET blogs by service
+router.get('/service/:serviceSlug', async (req, res) => {
+  try {
+    const { serviceSlug } = req.params
+    const { page = 1, limit = 3 } = req.query
+    
+    console.log('Fetching blogs for service:', serviceSlug)
+    
+    const filter = { 
+      published: true,
+      relatedService: serviceSlug
+    }
+    
+    const skip = (page - 1) * limit
+    
+    const blogs = await Blog.find(filter)
+      .sort({ publishedAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit))
+      .select('-content')
+    
+    const total = await Blog.countDocuments(filter)
+    
+    console.log('Found blogs:', blogs.length)
+    
+    res.json({
+      success: true,
+      count: blogs.length,
+      total,
+      page: parseInt(page),
+      pages: Math.ceil(total / limit),
+      data: blogs
+    })
+  } catch (error) {
+    console.log('MongoDB not available, using fallback data')
+    console.log('Service slug requested:', req.params.serviceSlug)
+    // Return fallback data if MongoDB is not available
+    let filteredData = fallbackBlogs.filter(blog => 
+      blog.published && blog.relatedService === req.params.serviceSlug
+    )
+    
+    console.log('Filtered fallback blogs:', filteredData.length)
+    
+    const startIndex = (page - 1) * limit
+    const endIndex = startIndex + parseInt(limit)
+    const paginatedData = filteredData.slice(startIndex, endIndex)
+    
+    console.log('Paginated data:', paginatedData)
+    
+    res.json({
+      success: true,
+      count: paginatedData.length,
+      total: filteredData.length,
+      page: parseInt(page),
+      pages: Math.ceil(filteredData.length / limit),
+      data: paginatedData,
+      fallback: true
+    })
+  }
+})
 
 // GET all published blogs with pagination and filtering
 router.get('/', async (req, res) => {
