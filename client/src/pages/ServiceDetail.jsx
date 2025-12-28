@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Helmet } from 'react-helmet-async'
-import { servicesAPI } from '../services/api'
+import { servicesAPI, blogAPI, testAPI } from '../services/api'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
@@ -10,12 +10,45 @@ const ServiceDetail = () => {
   const { slug } = useParams()
   const navigate = useNavigate()
   const [service, setService] = useState(null)
+  const [relatedBlogs, setRelatedBlogs] = useState([])
+  const [blogsLoading, setBlogsLoading] = useState(true)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
     fetchService()
   }, [slug])
+
+  useEffect(() => {
+    if (service) {
+      fetchRelatedBlogs()
+    }
+  }, [service])
+
+  const fetchRelatedBlogs = async () => {
+    try {
+      setBlogsLoading(true)
+      console.log('Fetching blogs for service slug:', slug)
+      
+      // Try the regular API with shorter timeout
+      const response = await blogAPI.getByService(slug, { limit: 3 })
+      console.log('Blog API response:', response)
+      
+      if (response.data && response.data.success) {
+        setRelatedBlogs(response.data.data || [])
+        console.log('Related blogs set:', response.data.data)
+      } else {
+        console.log('API response not successful:', response)
+        setRelatedBlogs([])
+      }
+    } catch (err) {
+      console.error('Error fetching related blogs:', err)
+      // Set empty array on error to avoid infinite loading
+      setRelatedBlogs([])
+    } finally {
+      setBlogsLoading(false)
+    }
+  }
 
   const fetchService = async () => {
     try {
@@ -236,6 +269,101 @@ const ServiceDetail = () => {
             </motion.div>
           </div>
         </section>
+
+        {/* Related Blog Posts */}
+        {relatedBlogs.length > 0 && (
+          <section className="py-20 bg-gray-50">
+            <div className="container mx-auto px-6">
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                className="max-w-4xl mx-auto"
+              >
+                <motion.h2 
+                  variants={itemVariants}
+                  className="text-3xl font-bold text-center text-gray-900 mb-12"
+                >
+                  Related Articles & Insights
+                </motion.h2>
+                <motion.div 
+                  variants={itemVariants}
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                >
+                  {relatedBlogs.map((blog, index) => (
+                    <motion.div
+                      key={blog._id}
+                      variants={itemVariants}
+                      whileHover={{ y: -5 }}
+                      className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
+                    >
+                      <Link to={`/blog/${blog.slug}`} className="block">
+                        <div className="relative h-48 overflow-hidden">
+                          <img
+                            src={blog.image}
+                            alt={blog.title}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <div className="absolute bottom-4 left-4 right-4">
+                            <span className="px-3 py-1 bg-blue-600 text-white text-xs font-medium rounded-full">
+                              {blog.category}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="p-6">
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-xs text-gray-500 font-medium">
+                              {new Date(blog.publishedAt).toLocaleDateString('en-US', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                              })}
+                            </span>
+                            <span className="text-xs text-gray-500">
+                              {blog.readTime} min read
+                            </span>
+                          </div>
+                          
+                          <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                            {blog.title}
+                          </h3>
+                          
+                          <p className="text-gray-600 text-sm line-clamp-3 mb-4">
+                            {blog.excerpt}
+                          </p>
+
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-500">
+                              {blog.author}
+                            </span>
+                            <span className="text-blue-600 font-medium text-sm group-hover:text-blue-700 transition-colors">
+                              Read Article →
+                            </span>
+                          </div>
+                        </div>
+                      </Link>
+                    </motion.div>
+                  ))}
+                </motion.div>
+
+                {blogsLoading && (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                  </div>
+                )}
+
+                {!blogsLoading && relatedBlogs.length === 0 && (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500">No related articles found for this service.</p>
+                  </div>
+                )}
+              </motion.div>
+            </div>
+          </section>
+        )}
       </main>
 
       <Footer />

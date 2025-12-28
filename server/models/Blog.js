@@ -39,6 +39,11 @@ const blogSchema = new mongoose.Schema({
     required: true,
     enum: ['PR Strategy', 'Digital Marketing', 'Crisis Management', 'Brand Building', 'Media Relations', 'Industry News']
   },
+  relatedService: {
+    type: String,
+    enum: ['media-relations', 'brand-management', 'strategic-communications', 'content-creation', 'digital-pr', 'crisis-management'],
+    default: null
+  },
   featured: {
     type: Boolean,
     default: false

@@ -1,137 +1,141 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Helmet } from 'react-helmet-async'
-import { mediaAPI } from '../services/api'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import { useState, useEffect, useCallback, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Helmet } from "react-helmet-async";
+import { mediaAPI } from "../services/api";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const Media = () => {
-  const [mediaItems, setMediaItems] = useState([])
-  const [categories, setCategories] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState('all')
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [page, setPage] = useState(1)
-  const [hasMore, setHasMore] = useState(true)
-  const [loadingMore, setLoadingMore] = useState(false)
-  const observerRef = useRef()
-  const loadMoreRef = useRef()
+  const [mediaItems, setMediaItems] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const observerRef = useRef();
+  const loadMoreRef = useRef();
 
-  const fetchMediaItems = useCallback(async (reset = false) => {
-    try {
-      if (reset) {
-        setLoading(true)
-        setPage(1)
-        setMediaItems([])
-      } else {
-        setLoadingMore(true)
-      }
-
-      const currentPage = reset ? 1 : page
-      const params = {
-        page: currentPage,
-        limit: 6
-      }
-
-      if (selectedCategory !== 'all') {
-        params.category = selectedCategory
-      }
-
-      const response = await mediaAPI.getAll(params)
-      
-      if (response.data.success) {
+  const fetchMediaItems = useCallback(
+    async (reset = false) => {
+      try {
         if (reset) {
-          setMediaItems(response.data.data)
+          setLoading(true);
+          setPage(1);
+          setMediaItems([]);
         } else {
-          setMediaItems(prev => [...prev, ...response.data.data])
+          setLoadingMore(true);
         }
-        
-        setHasMore(response.data.page < response.data.pages)
-        if (!reset) {
-          setPage(prev => prev + 1)
+
+        const currentPage = reset ? 1 : page;
+        const params = {
+          page: currentPage,
+          limit: 6,
+        };
+
+        if (selectedCategory !== "all") {
+          params.category = selectedCategory;
         }
+
+        const response = await mediaAPI.getAll(params);
+        console.log("MEDIA API RESPONSE:", response.data);
+
+        if (response.data.success) {
+          if (reset) {
+            setMediaItems(response.data.data);
+          } else {
+            setMediaItems((prev) => [...prev, ...response.data.data]);
+          }
+
+          setHasMore(response.data.data.length === 6);
+
+          if (!reset) {
+            setPage((prev) => prev + 1);
+          }
+        }
+      } catch (err) {
+        setError("Failed to load media coverage");
+        console.error("Error fetching media items:", err);
+      } finally {
+        setLoading(false);
+        setLoadingMore(false);
       }
-    } catch (err) {
-      setError('Failed to load media coverage')
-      console.error('Error fetching media items:', err)
-    } finally {
-      setLoading(false)
-      setLoadingMore(false)
-    }
-  }, [selectedCategory, page])
+    },
+    [selectedCategory, page]
+  );
 
   const fetchCategories = async () => {
     try {
-      const response = await mediaAPI.getCategories()
+      const response = await mediaAPI.getCategories();
       if (response.data.success) {
-        setCategories(['all', ...response.data.data])
+        setCategories(["all", ...response.data.data]);
       }
     } catch (err) {
-      console.error('Error fetching categories:', err)
+      console.error("Error fetching categories:", err);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchMediaItems(true)
-  }, [selectedCategory, fetchMediaItems])
+    fetchMediaItems(true);
+  }, [selectedCategory]);
 
   useEffect(() => {
-    fetchCategories()
-  }, [])
+    fetchCategories();
+  }, []);
 
   // Intersection Observer for infinite scroll
   useEffect(() => {
+    const loadMore = () => {
+      if (!loadingMore && hasMore) {
+        fetchMediaItems(false);
+      }
+    };
     const observer = new IntersectionObserver(
       (entries) => {
-        const target = entries[0]
+        const target = entries[0];
         if (target.isIntersecting && hasMore && !loadingMore) {
-          loadMore()
+          loadMore();
         }
       },
       {
         threshold: 0.1,
-        rootMargin: '100px'
+        rootMargin: "100px",
       }
-    )
+    );
 
     if (loadMoreRef.current) {
-      observer.observe(loadMoreRef.current)
+      observer.observe(loadMoreRef.current);
     }
 
     return () => {
       if (loadMoreRef.current) {
-        observer.unobserve(loadMoreRef.current)
+        observer.unobserve(loadMoreRef.current);
       }
-    }
-  }, [hasMore, loadingMore, loadMore])
+    };
+  }, [hasMore, loadingMore, fetchMediaItems]);
 
   const handleCategoryChange = (category) => {
-    setSelectedCategory(category)
-  }
-
-  const loadMore = () => {
-    if (!loadingMore && hasMore) {
-      fetchMediaItems(false)
-    }
-  }
+    setSelectedCategory(category);
+  };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })
-  }
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
-  }
+        staggerChildren: 0.1,
+      },
+    },
+  };
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
@@ -139,17 +143,20 @@ const Media = () => {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.5
-      }
-    }
-  }
+        duration: 0.5,
+      },
+    },
+  };
 
   if (loading) {
     return (
       <>
         <Helmet>
           <title>Media Coverage - PR Agency</title>
-          <meta name="description" content="Explore our media coverage and press mentions across various publications." />
+          <meta
+            name="description"
+            content="Explore our media coverage and press mentions across various publications."
+          />
         </Helmet>
         <Header />
         <div className="min-h-screen flex items-center justify-center">
@@ -157,7 +164,7 @@ const Media = () => {
         </div>
         <Footer />
       </>
-    )
+    );
   }
 
   if (error) {
@@ -171,7 +178,7 @@ const Media = () => {
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Oops!</h2>
             <p className="text-gray-600">{error}</p>
-            <button 
+            <button
               onClick={() => fetchMediaItems(true)}
               className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
@@ -181,21 +188,27 @@ const Media = () => {
         </div>
         <Footer />
       </>
-    )
+    );
   }
 
   return (
     <>
       <Helmet>
         <title>Media Coverage - PR Agency</title>
-        <meta name="description" content="Explore our media coverage and press mentions across various publications." />
+        <meta
+          name="description"
+          content="Explore our media coverage and press mentions across various publications."
+        />
         <meta property="og:title" content="Media Coverage - PR Agency" />
-        <meta property="og:description" content="Explore our media coverage and press mentions across various publications." />
+        <meta
+          property="og:description"
+          content="Explore our media coverage and press mentions across various publications."
+        />
         <meta property="og:type" content="website" />
       </Helmet>
 
       <Header />
-      
+
       <main className="pt-20">
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-gray-900 to-gray-800 text-white py-20">
@@ -208,7 +221,8 @@ const Media = () => {
             >
               <h1 className="text-5xl font-bold mb-6">Media Coverage</h1>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-                Explore our latest press mentions and media coverage across leading publications
+                Explore our latest press mentions and media coverage across
+                leading publications
               </p>
             </motion.div>
           </div>
@@ -226,8 +240,8 @@ const Media = () => {
                   whileTap={{ scale: 0.95 }}
                   className={`px-6 py-2 rounded-full font-medium transition-all ${
                     selectedCategory === category
-                      ? 'bg-blue-600 text-white shadow-lg'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      ? "bg-blue-600 text-white shadow-lg"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
                   {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -265,7 +279,7 @@ const Media = () => {
                           loading="lazy"
                           decoding="async"
                         />
-                        
+
                         {/* Category Badge */}
                         <div className="absolute top-4 left-4">
                           <span className="px-3 py-1 bg-blue-600 text-white text-sm font-medium rounded-full">
@@ -291,8 +305,18 @@ const Media = () => {
                               className="inline-flex items-center text-white font-semibold hover:text-blue-300 transition-colors text-sm"
                             >
                               Read Article
-                              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                              <svg
+                                className="w-4 h-4 ml-2"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                />
                               </svg>
                             </a>
                           </div>
@@ -309,11 +333,11 @@ const Media = () => {
                             {item.category}
                           </span>
                         </div>
-                        
+
                         <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
                           {item.title}
                         </h3>
-                        
+
                         <p className="text-gray-600 text-sm line-clamp-2 mb-4">
                           {item.description}
                         </p>
@@ -329,8 +353,18 @@ const Media = () => {
                             className="inline-flex items-center text-blue-600 font-semibold hover:text-blue-700 transition-colors text-sm"
                           >
                             Read More
-                            <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            <svg
+                              className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M17 8l4 4m0 0l-4 4m4-4H3"
+                              />
                             </svg>
                           </a>
                         </div>
@@ -343,7 +377,9 @@ const Media = () => {
 
             {mediaItems.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">No media coverage found for this category.</p>
+                <p className="text-gray-500 text-lg">
+                  No media coverage found for this category.
+                </p>
               </div>
             )}
 
@@ -352,11 +388,29 @@ const Media = () => {
               <div ref={loadMoreRef} className="text-center mt-12">
                 {loadingMore && (
                   <div className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-8 w-8 text-blue-600"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
                     </svg>
-                    <span className="text-gray-600 font-medium">Loading more coverage...</span>
+                    <span className="text-gray-600 font-medium">
+                      Loading more coverage...
+                    </span>
                   </div>
                 )}
               </div>
@@ -366,7 +420,7 @@ const Media = () => {
             {hasMore && !loadingMore && (
               <div className="text-center mt-8">
                 <motion.button
-                  onClick={loadMore}
+                  onClick={() => fetchMediaItems(false)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
@@ -381,7 +435,7 @@ const Media = () => {
 
       <Footer />
     </>
-  )
-}
+  );
+};
 
-export default Media
+export default Media;
