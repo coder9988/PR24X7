@@ -1,90 +1,84 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Link, useNavigate } from 'react-router-dom'
-import { Helmet } from 'react-helmet-async'
-import { 
-  Users, 
-  FileText, 
-  Image, 
-  Settings, 
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
+
+import {
+  Users,
+  FileText,
+  Image,
+  Settings,
   LogOut,
   BarChart3,
   Calendar,
   TrendingUp,
-  Eye
-} from 'lucide-react'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+  Eye,
+} from "lucide-react";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import { useAuth } from "../context/AuthContext";
 
 const Admin = () => {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState('dashboard')
-  const navigate = useNavigate()
+  const { user, logout } = useAuth();
 
-  useEffect(() => {
-    // Check authentication
-    const token = localStorage.getItem('token')
-    const userData = localStorage.getItem('user')
-    
-    if (!token || !userData) {
-      navigate('/login')
-      return
-    }
-    
-    try {
-      setUser(JSON.parse(userData))
-    } catch (error) {
-      console.error('Error parsing user data:', error)
-      navigate('/login')
-    } finally {
-      setLoading(false)
-    }
-  }, [navigate])
+  const [activeTab, setActiveTab] = useState("dashboard");
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('user')
-    navigate('/login')
-  }
-
-  if (loading) {
-    return (
-      <>
-        <Helmet>
-          <title>Loading Admin - PR Agency</title>
-        </Helmet>
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-        </div>
-      </>
-    )
-  }
+    logout();
+  };
 
   const stats = [
-    { label: 'Total Blog Posts', value: '24', icon: FileText, color: 'bg-blue-500' },
-    { label: 'Media Coverage', value: '18', icon: Image, color: 'bg-green-500' },
-    { label: 'Total Services', value: '6', icon: Settings, color: 'bg-purple-500' },
-    { label: 'Total Views', value: '1,234', icon: Eye, color: 'bg-orange-500' },
-  ]
+    {
+      label: "Total Blog Posts",
+      value: "24",
+      icon: FileText,
+      color: "bg-blue-500",
+    },
+    {
+      label: "Media Coverage",
+      value: "18",
+      icon: Image,
+      color: "bg-green-500",
+    },
+    {
+      label: "Total Services",
+      value: "6",
+      icon: Settings,
+      color: "bg-purple-500",
+    },
+    { label: "Total Views", value: "1,234", icon: Eye, color: "bg-orange-500" },
+  ];
 
   const recentActivity = [
-    { id: 1, action: 'New blog post created', time: '2 hours ago', type: 'blog' },
-    { id: 2, action: 'Media coverage updated', time: '4 hours ago', type: 'media' },
-    { id: 3, action: 'Service edited', time: '1 day ago', type: 'service' },
-    { id: 4, action: 'New user registered', time: '2 days ago', type: 'user' },
-  ]
+    {
+      id: 1,
+      action: "New blog post created",
+      time: "2 hours ago",
+      type: "blog",
+    },
+    {
+      id: 2,
+      action: "Media coverage updated",
+      time: "4 hours ago",
+      type: "media",
+    },
+    { id: 3, action: "Service edited", time: "1 day ago", type: "service" },
+    { id: 4, action: "New user registered", time: "2 days ago", type: "user" },
+  ];
 
   return (
     <>
       <Helmet>
         <title>Admin Dashboard - PR Agency</title>
-        <meta name="description" content="PR Agency admin dashboard for managing content" />
+        <meta
+          name="description"
+          content="PR Agency admin dashboard for managing content"
+        />
       </Helmet>
 
       <div className="min-h-screen bg-gray-50">
         <Header />
-        
+
         <main className="py-8">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             {/* Welcome Section */}
@@ -96,8 +90,12 @@ const Admin = () => {
             >
               <div className="bg-white rounded-xl shadow-sm p-6 flex items-center justify-between">
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-                  <p className="text-gray-600 mt-1">Welcome back, {user?.name || 'Admin'}</p>
+                  <h1 className="text-2xl font-bold text-gray-900">
+                    Admin Dashboard
+                  </h1>
+                  <p className="text-gray-600 mt-1">
+                    Welcome back, {user?.name || "Admin"}
+                  </p>
                 </div>
                 <div className="flex items-center space-x-4">
                   <Link
@@ -137,8 +135,12 @@ const Admin = () => {
                       <stat.icon className="w-6 h-6 text-white" />
                     </div>
                     <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">{stat.label}</p>
-                      <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                      <p className="text-sm font-medium text-gray-600">
+                        {stat.label}
+                      </p>
+                      <p className="text-2xl font-bold text-gray-900">
+                        {stat.value}
+                      </p>
                     </div>
                   </div>
                 </motion.div>
@@ -153,7 +155,9 @@ const Admin = () => {
               className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8"
             >
               <div className="bg-white rounded-xl shadow-sm p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Quick Actions
+                </h3>
                 <div className="space-y-3">
                   <Link
                     to="/admin/blog/new"
@@ -180,7 +184,9 @@ const Admin = () => {
               </div>
 
               <div className="bg-white rounded-xl shadow-sm p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Analytics</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Analytics
+                </h3>
                 <div className="space-y-3">
                   <div className="flex items-center text-gray-700">
                     <BarChart3 className="w-4 h-4 mr-2" />
@@ -198,18 +204,27 @@ const Admin = () => {
               </div>
 
               <div className="bg-white rounded-xl shadow-sm p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                  Recent Activity
+                </h3>
                 <div className="space-y-3">
-                  {recentActivity.slice(0, 3).map(activity => (
+                  {recentActivity.slice(0, 3).map((activity) => (
                     <div key={activity.id} className="flex items-start">
-                      <div className={`w-2 h-2 rounded-full mt-2 mr-3 ${
-                        activity.type === 'blog' ? 'bg-blue-500' :
-                        activity.type === 'media' ? 'bg-green-500' :
-                        activity.type === 'service' ? 'bg-purple-500' :
-                        'bg-gray-500'
-                      }`}></div>
+                      <div
+                        className={`w-2 h-2 rounded-full mt-2 mr-3 ${
+                          activity.type === "blog"
+                            ? "bg-blue-500"
+                            : activity.type === "media"
+                            ? "bg-green-500"
+                            : activity.type === "service"
+                            ? "bg-purple-500"
+                            : "bg-gray-500"
+                        }`}
+                      ></div>
                       <div className="flex-1">
-                        <p className="text-sm text-gray-900">{activity.action}</p>
+                        <p className="text-sm text-gray-900">
+                          {activity.action}
+                        </p>
                         <p className="text-xs text-gray-500">{activity.time}</p>
                       </div>
                     </div>
@@ -226,7 +241,9 @@ const Admin = () => {
               className="bg-white rounded-xl shadow-sm overflow-hidden"
             >
               <div className="px-6 py-4 border-b border-gray-200">
-                <h3 className="text-lg font-semibold text-gray-900">Recent Activity</h3>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Recent Activity
+                </h3>
               </div>
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -255,12 +272,17 @@ const Admin = () => {
                           {activity.action}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            activity.type === 'blog' ? 'bg-blue-100 text-blue-800' :
-                            activity.type === 'media' ? 'bg-green-100 text-green-800' :
-                            activity.type === 'service' ? 'bg-purple-100 text-purple-800' :
-                            'bg-gray-100 text-gray-800'
-                          }`}>
+                          <span
+                            className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                              activity.type === "blog"
+                                ? "bg-blue-100 text-blue-800"
+                                : activity.type === "media"
+                                ? "bg-green-100 text-green-800"
+                                : activity.type === "service"
+                                ? "bg-purple-100 text-purple-800"
+                                : "bg-gray-100 text-gray-800"
+                            }`}
+                          >
                             {activity.type}
                           </span>
                         </td>
@@ -279,7 +301,7 @@ const Admin = () => {
         <Footer />
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Admin
+export default Admin;

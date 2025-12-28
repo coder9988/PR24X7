@@ -1,44 +1,65 @@
-import { motion } from 'framer-motion'
-import { useRef, useEffect, useState } from 'react'
+import { motion } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 
 const TrustedByBrands = () => {
-  const [isInView, setIsInView] = useState(false)
-  const sectionRef = useRef(null)
+  const [isInView, setIsInView] = useState(false);
+  const sectionRef = useRef(null);
 
   const brands = [
-    { name: 'TechCorp', logo: 'https://images.unsplash.com/photo-1562577187-c316b05c6fa5?w=150&h=80&fit=crop&auto=format' },
-    { name: 'FashionHub', logo: 'https://images.unsplash.com/photo-1441986300917-64674bd228d2?w=150&h=80&fit=crop&auto=format' },
-    { name: 'FoodieBrand', logo: 'https://images.unsplash.com/photo-1556909058-7f7b972584c7?w=150&h=80&fit=crop&auto=format' },
-    { name: 'HealthPlus', logo: 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=150&h=80&fit=crop&auto=format' },
-    { name: 'FinancePro', logo: 'https://images.unsplash.com/photo-1611974289855-9c2b0d63dd6?w=150&h=80&fit=crop&auto=format' },
-    { name: 'EduTech', logo: 'https://images.unsplash.com/photo-1501505907466-5674a12d3aa1?w=150&h=80&fit=crop&auto=format' },
-    { name: 'GreenLife', logo: 'https://images.unsplash.com/photo-1542601906-a0b8e4c029a?w=150&h=80&fit=crop&auto=format' },
-    { name: 'MediaMax', logo: 'https://images.unsplash.com/photo-1596528937114-4b1c8f66459e?w=150&h=80&fit=crop&auto=format' },
-  ]
+    { name: "TechCorp", logo: "img/hero/techcorp.jpg" },
+    {
+      name: "FashionHub",
+      logo: "img/hero/fashionhub.jpg",
+    },
+    {
+      name: "FoodieBrand",
+      logo: "img/hero/foodiebrand.jpg",
+    },
+    {
+      name: "HealthPlus",
+      logo: "img/hero/healthplus.jpg",
+    },
+    {
+      name: "FinancePro",
+      logo: "img/hero/financepro.jpg",
+    },
+    {
+      name: "EduTech",
+      logo: "img/hero/edtech.jpg",
+    },
+    {
+      name: "GreenLife",
+      logo: "img/hero/greenlife2.jpg",
+    },
+    {
+      name: "MediaMax",
+      logo: "img/hero/mediamax.jpg",
+    },
+  ];
 
   // Duplicate brands for seamless loop
-  const duplicatedBrands = [...brands, ...brands]
+  const duplicatedBrands = [...brands, ...brands];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setIsInView(true)
+          setIsInView(true);
         }
       },
       { threshold: 0.1 }
-    )
+    );
 
     if (sectionRef.current) {
-      observer.observe(sectionRef.current)
+      observer.observe(sectionRef.current);
     }
 
     return () => {
       if (sectionRef.current) {
-        observer.unobserve(sectionRef.current)
+        observer.unobserve(sectionRef.current);
       }
-    }
-  }, [])
+    };
+  }, []);
 
   return (
     <section ref={sectionRef} className="py-16 bg-gray-50 overflow-hidden">
@@ -71,9 +92,9 @@ const TrustedByBrands = () => {
             transition={{
               x: {
                 repeat: Infinity,
-                repeatType: 'loop',
+                repeatType: "loop",
                 duration: 30,
-                ease: 'linear',
+                ease: "linear",
               },
             }}
           >
@@ -94,8 +115,7 @@ const TrustedByBrands = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default TrustedByBrands
-
+export default TrustedByBrands;

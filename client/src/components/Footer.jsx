@@ -1,36 +1,57 @@
-import { motion } from 'framer-motion'
-import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react'
-
+import { motion } from "framer-motion";
+// import { link } from "react-router-dom";
+import {
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+  Mail,
+  Phone,
+  MapPin,
+} from "lucide-react";
+import Contact from "./Contact.jsx";
+<Routes>
+  <Route path="/contact" element={<Contact />} />
+</Routes>;
 const Footer = () => {
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
 
   const footerLinks = {
     company: [
-      { name: 'About Us', href: '#about' },
-      { name: 'Services', href: '#services' },
-      { name: 'Portfolio', href: '#portfolio' },
-      { name: 'Contact', href: '#contact' },
+      { name: "About Us", href: "/about" },
+      { name: "Services", href: "/services" },
+      { name: "Portfolio", href: "/media" },
+      { name: "Contact", href: "/contact" },
     ],
     services: [
-      { name: 'Media Relations', href: '#services' },
-      { name: 'Brand Management', href: '#services' },
-      { name: 'Digital PR', href: '#services' },
-      { name: 'Crisis Management', href: '#services' },
+      { name: "Media Relations", href: "/services/media-relations" },
+      { name: "Brand Management", href: "/services/brand-management" },
+      { name: "Digital PR", href: "/services/digital-pr" },
+      { name: "Crisis Management", href: "/services/crisis-management" },
+      { name: "Content Creation", href: "/services/content-creation" },
+      {
+        name: "Strategic Communications",
+        href: "/services/strategic-communications",
+      },
     ],
     resources: [
-      { name: 'Blog', href: '#' },
-      { name: 'Case Studies', href: '#portfolio' },
-      { name: 'Resources', href: '#' },
-      { name: 'FAQ', href: '#' },
+      { name: "Blog", href: "#" },
+      { name: "Case Studies", href: "#portfolio" },
+      { name: "Resources", href: "#" },
+      { name: "FAQ", href: "#" },
     ],
-  }
+  };
 
   const socialLinks = [
-    { icon: Facebook, href: '#', label: 'Facebook' },
-    { icon: Twitter, href: '#', label: 'Twitter' },
-    { icon: Instagram, href: '#', label: 'Instagram' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
-  ]
+    { icon: Facebook, href: "#", label: "Facebook" },
+    { icon: Twitter, href: "#", label: "Twitter" },
+    { icon: Instagram, href: "#", label: "Instagram" },
+    {
+      icon: Linkedin,
+      href: "https://www.linkedin.com/in/jamudit",
+      label: "LinkedIn",
+    },
+  ];
 
   return (
     <footer className="bg-gray-900 text-gray-300">
@@ -47,11 +68,12 @@ const Footer = () => {
               PR<span className="text-accent-400">Agency</span>
             </h3>
             <p className="text-gray-400 mb-6 leading-relaxed">
-              Elevating brands through strategic public relations and compelling storytelling.
+              Elevating brands through strategic public relations and compelling
+              storytelling.
             </p>
             <div className="flex gap-4">
               {socialLinks.map((social, index) => {
-                const Icon = social.icon
+                const Icon = social.icon;
                 return (
                   <motion.a
                     key={social.label}
@@ -67,7 +89,7 @@ const Footer = () => {
                   >
                     <Icon className="w-5 h-5" />
                   </motion.a>
-                )
+                );
               })}
             </div>
           </motion.div>
@@ -127,19 +149,25 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-start gap-3">
                 <Mail className="w-5 h-5 text-primary-400 flex-shrink-0 mt-0.5" />
-                <a href="mailto:hello@pragency.com" className="hover:text-primary-400 transition-colors">
-                  hello@pragency.com
+                <a
+                  href="mailto:hello@pragency.com"
+                  className="hover:text-primary-400 transition-colors"
+                >
+                  jainmudit616@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <Phone className="w-5 h-5 text-primary-400 flex-shrink-0 mt-0.5" />
-                <a href="tel:+15551234567" className="hover:text-primary-400 transition-colors">
-                  +1 (555) 123-4567
+                <a
+                  href="tel:+15551234567"
+                  className="hover:text-primary-400 transition-colors"
+                >
+                  91+ 6828824686
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-primary-400 flex-shrink-0 mt-0.5" />
-                <span>123 PR Street, New York, NY 10001</span>
+                <span>Mumbai, Maharashta, India</span>
               </li>
             </ul>
           </motion.div>
@@ -169,8 +197,7 @@ const Footer = () => {
         </motion.div>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
-
+export default Footer;

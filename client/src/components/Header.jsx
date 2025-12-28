@@ -1,11 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useUI } from "../context/UIContext";
 
 const Header = () => {
+  const { openGetStarted } = useUI();
+  const location = useLocation();
+  const prevPathRef = useRef(location.pathname);
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,7 +25,7 @@ const Header = () => {
     { name: "Services", href: "/services" },
     { name: "Media", href: "/media" },
     { name: "Blog", href: "/blog" },
-    { name: "Login", href: "/login" },
+    { name: "Contact", href: "/contact" },
   ];
 
   const mobileMenuVariants = {
@@ -68,45 +72,64 @@ const Header = () => {
           </motion.div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-2">
-            {navItems.map((item) => (
-              <motion.div key={item.name} whileHover={{ y: -2 }}>
-                <Link
-                  to={item.href}
-                  className={`font-medium transition-colors relative group px-4 py-2 rounded-full ${
-                    location.pathname === item.href
-                      ? "text-primary-600"
-                      : "text-gray-700 hover:text-primary-600"
-                  }`}
-                >
-                  {item.name}
-                  {location.pathname === item.href && (
-                    <motion.span
-                      layoutId="active-pill"
-                      className="absolute inset-0 bg-primary-100/70 rounded-full z-[-1]"
-                      transition={{
-                        type: "spring",
-                        stiffness: 300,
-                        damping: 30,
-                      }}
-                    />
-                  )}
-                  <span className="absolute inset-0 rounded-full bg-primary-100/70 scale-x-0 group-hover:scale-x-100 transition-transform origin-center z-[-1]"></span>
-                </Link>
-              </motion.div>
-            ))}
-            <motion.a
-              href="/#contact"
-              whileHover={{
-                scale: 1.05,
-                y: -2,
-                boxShadow: "0 10px 20px -10px rgba(0,0,0,0.3)",
-              }}
-              whileTap={{ scale: 0.95 }}
-              className="ml-4 px-6 py-2.5 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-full font-medium transition-all shadow-lg"
-            >
-              Get Started
-            </motion.a>
+          <div className="hidden md:flex items-center w-full ml-12">
+            {/* Center Nav */}
+            <div className="flex items-center space-x-2 mx-auto">
+              {navItems.map((item) => (
+                <motion.div key={item.name} whileHover={{ y: -2 }}>
+                  <Link
+                    to={item.href}
+                    className={`font-medium transition-colors relative group px-4 py-2 rounded-full ${
+                      location.pathname === item.href
+                        ? "text-primary-600"
+                        : "text-gray-500 hover:text-primary-600"
+                    }`}
+                  >
+                    {item.name}
+                    {location.pathname === item.href && (
+                      <motion.span
+                        layoutId="active-pill"
+                        className="absolute inset-0 bg-primary-100/70 rounded-full z-[-1]"
+                        transition={{
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 30,
+                        }}
+                      />
+                    )}
+                    <span className="absolute inset-0 rounded-full bg-primary-100/70 scale-x-0 group-hover:scale-x-100 transition-transform origin-center z-[-1]" />
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Right Actions */}
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => openGetStarted("login")}
+                className="
+    px-4 py-2 rounded-full
+    border border-gray-300
+    text-gray-700 font-medium
+    hover:border-primary-600 hover:text-primary-600
+    transition-all duration-300
+  "
+              >
+                Login
+              </button>
+              <motion.button
+                onClick={() => openGetStarted("options")}
+                whileHover={{
+                  scale: 1.05,
+                  y: -2,
+                  boxShadow: "0 10px 20px -10px rgba(0,0,0,0.3)",
+                }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 py-2.5 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-full font-medium transition-all shadow-lg"
+              >
+                Get Started
+              </motion.button>
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -159,14 +182,17 @@ const Header = () => {
                     </Link>
                   </motion.div>
                 ))}
-                <motion.a
-                  href="/#contact"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block mt-4 px-6 py-2.5 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-full font-medium transition-all text-center"
+
+                <motion.button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    openGetStarted("options");
+                  }}
+                  className="block mt-4 w-full px-6 py-2.5 bg-gradient-to-r from-primary-600 to-accent-600 text-white rounded-full font-medium transition-all text-center"
                   variants={menuItemVariants}
                 >
                   Get Started
-                </motion.a>
+                </motion.button>
               </div>
             </motion.div>
           )}

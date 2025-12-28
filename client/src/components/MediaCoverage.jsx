@@ -1,49 +1,49 @@
-import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
-import { ExternalLink } from 'lucide-react'
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import { ExternalLink } from "lucide-react";
 
 const MediaCoverage = () => {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   const mediaOutlets = [
     {
-      name: 'Forbes',
-      logo: 'https://images.unsplash.com/photo-1611224943852-8d76329e1eb3?w=200&h=100&fit=crop&auto=format',
-      description: 'Featured in Forbes for innovative PR strategies',
-      link: '#',
+      name: "Tata Group",
+      logo: "img/media/tata2.jpg",
+      description: "Strategic brand communications and corporate reputation.",
+      link: "https://www.tata.com",
     },
     {
-      name: 'TechCrunch',
-      logo: 'https://images.unsplash.com/photo-1557804218-c57a286f0dc4?w=200&h=100&fit=crop&auto=format',
-      description: 'Coverage of our tech client launches',
-      link: '#',
+      name: "Reliance Industries",
+      logo: "https://logo.clearbit.com/ril.com",
+      description: "Large-scale business and industry leadership coverage.",
+      link: "https://www.ril.com",
     },
     {
-      name: 'The New York Times',
-      logo: 'https://images.unsplash.com/photo-1486312338008-5cc8c4b35a9?w=200&h=100&fit=crop&auto=format',
-      description: 'Major feature story placement',
-      link: '#',
+      name: "Infosys",
+      logo: "https://logo.clearbit.com/infosys.com",
+      description: "Global IT services and digital transformation stories.",
+      link: "https://www.infosys.com",
     },
     {
-      name: 'Bloomberg',
-      logo: 'https://images.unsplash.com/photo-1611974289855-9c2b0d63dd6?w=200&h=100&fit=crop&auto=format',
-      description: 'Business news coverage',
-      link: '#',
+      name: "Wipro",
+      logo: "https://logo.clearbit.com/wipro.com",
+      description: "Enterprise technology and innovation visibility.",
+      link: "https://www.wipro.com",
     },
     {
-      name: 'Vogue',
-      logo: 'https://images.unsplash.com/photo-1441986300917-64674bd228d2?w=200&h=100&fit=crop&auto=format',
-      description: 'Fashion brand feature',
-      link: '#',
+      name: "Flipkart",
+      logo: "https://logo.clearbit.com/flipkart.com",
+      description: "E-commerce growth and consumer market coverage.",
+      link: "https://www.flipkart.com",
     },
     {
-      name: 'Harvard Business Review',
-      logo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=100&fit=crop&auto=format',
-      description: 'Thought leadership article',
-      link: '#',
+      name: "Zomato",
+      logo: "https://logo.clearbit.com/zomato.com",
+      description: "Digital-first branding and consumer engagement campaigns.",
+      link: "https://www.zomato.com",
     },
-  ]
+  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -53,7 +53,7 @@ const MediaCoverage = () => {
         staggerChildren: 0.1,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -64,7 +64,7 @@ const MediaCoverage = () => {
         duration: 0.5,
       },
     },
-  }
+  };
 
   return (
     <section ref={ref} className="py-24 bg-white">
@@ -82,14 +82,15 @@ const MediaCoverage = () => {
             Featured in Top Media Outlets
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Our clients have been featured in the world's most prestigious publications and media platforms.
+            Our clients have been featured in the world's most prestigious
+            publications and media platforms.
           </p>
         </motion.div>
 
         <motion.div
           variants={containerVariants}
           initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
+          animate={isInView ? "visible" : "hidden"}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {mediaOutlets.map((outlet) => (
@@ -111,15 +112,13 @@ const MediaCoverage = () => {
                 <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
                   {outlet.name}
                 </h3>
-                <p className="text-gray-600 mb-4">
-                  {outlet.description}
-                </p>
+                <p className="text-gray-600 mb-4">{outlet.description}</p>
                 <div className="flex items-center text-primary-600 font-medium group-hover:gap-2 transition-all">
                   Read Article
                   <ExternalLink className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>
-              
+
               {/* Hover Effect Overlay */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 to-accent-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
             </motion.a>
@@ -150,8 +149,7 @@ const MediaCoverage = () => {
         </motion.div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default MediaCoverage
-
+export default MediaCoverage;

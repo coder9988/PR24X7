@@ -1,63 +1,70 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
 const serviceSchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: true,
-    trim: true
+  title: String,
+  slug: { type: String, unique: true },
+  description: String,
+  icon: String,
+
+  features: [
+    {
+      title: String,
+      description: String,
+    },
+  ],
+
+  process: [
+    {
+      step: Number,
+      title: String,
+      description: String,
+    },
+  ],
+
+  benefits: [String],
+  useCases: [String],
+
+  faqs: [
+    {
+      question: String,
+      answer: String,
+    },
+  ],
+
+  cta: {
+    heading: String,
+    buttonText: String,
+    link: String,
   },
-  slug: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true
-  },
-  description: {
-    type: String,
-    required: true
-  },
-  icon: {
-    type: String,
-    required: true
-  },
-  features: [{
-    type: String,
-    trim: true
-  }],
-  order: {
-    type: Number,
-    default: 0
-  },
-  isActive: {
-    type: Boolean,
-    default: true
-  },
+
+  order: Number,
+  isActive: Boolean,
+
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   updatedAt: {
     type: Date,
-    default: Date.now
-  }
-})
+    default: Date.now,
+  },
+});
 
 // Update the updatedAt field before saving
-serviceSchema.pre('save', function(next) {
-  this.updatedAt = Date.now()
-  next()
-})
+serviceSchema.pre("save", function (next) {
+  this.updatedAt = Date.now();
+  next();
+});
 
 // Create slug from title if not provided
-serviceSchema.pre('save', function(next) {
-  if (this.isModified('title') && !this.slug) {
+serviceSchema.pre("save", function (next) {
+  if (this.isModified("title") && !this.slug) {
     this.slug = this.title
       .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '')
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
   }
-  next()
-})
+  next();
+});
 
-export default mongoose.model('Service', serviceSchema)
+export default mongoose.model("Service", serviceSchema);

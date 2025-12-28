@@ -1,157 +1,160 @@
-import { useState, useEffect, useCallback } from 'react'
-import { Link } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Helmet } from 'react-helmet-async'
-import { blogAPI } from '../services/api'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Helmet } from "react-helmet-async";
+import { blogAPI } from "../services/api";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const Blog = () => {
-  const [blogs, setBlogs] = useState([])
-  const [featuredBlogs, setFeaturedBlogs] = useState([])
-  const [categories, setCategories] = useState([])
-  const [tags, setTags] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState('all')
-  const [selectedTag, setSelectedTag] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [page, setPage] = useState(1)
-  const [hasMore, setHasMore] = useState(true)
-  const [loadingMore, setLoadingMore] = useState(false)
+  const [blogs, setBlogs] = useState([]);
+  const [featuredBlogs, setFeaturedBlogs] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedTag, setSelectedTag] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
 
-  const fetchBlogs = useCallback(async (reset = false) => {
-    try {
-      if (reset) {
-        setLoading(true)
-        setPage(1)
-        setBlogs([])
-      } else {
-        setLoadingMore(true)
-      }
-
-      const currentPage = reset ? 1 : page
-      const params = {
-        page: currentPage,
-        limit: 6
-      }
-
-      if (selectedCategory !== 'all') {
-        params.category = selectedCategory
-      }
-
-      if (selectedTag) {
-        params.tag = selectedTag
-      }
-
-      if (searchQuery) {
-        params.search = searchQuery
-      }
-
-      const response = await blogAPI.getAll(params)
-      
-      if (response.data.success) {
+  const fetchBlogs = useCallback(
+    async (reset = false) => {
+      try {
         if (reset) {
-          setBlogs(response.data.data)
+          setLoading(true);
+          setPage(1);
+          setBlogs([]);
         } else {
-          setBlogs(prev => [...prev, ...response.data.data])
+          setLoadingMore(true);
         }
-        
-        setHasMore(response.data.page < response.data.pages)
-        if (!reset) {
-          setPage(prev => prev + 1)
+
+        const currentPage = reset ? 1 : page;
+        const params = {
+          page: currentPage,
+          limit: 6,
+        };
+
+        if (selectedCategory !== "all") {
+          params.category = selectedCategory;
         }
+
+        if (selectedTag) {
+          params.tag = selectedTag;
+        }
+
+        if (searchQuery) {
+          params.search = searchQuery;
+        }
+
+        const response = await blogAPI.getAll(params);
+
+        if (response.data.success) {
+          if (reset) {
+            setBlogs(response.data.data);
+          } else {
+            setBlogs((prev) => [...prev, ...response.data.data]);
+          }
+
+          setHasMore(response.data.page < response.data.pages);
+          if (!reset) {
+            setPage((prev) => prev + 1);
+          }
+        }
+      } catch (err) {
+        setError("Failed to load blog posts");
+        console.error("Error fetching blogs:", err);
+      } finally {
+        setLoading(false);
+        setLoadingMore(false);
       }
-    } catch (err) {
-      setError('Failed to load blog posts')
-      console.error('Error fetching blogs:', err)
-    } finally {
-      setLoading(false)
-      setLoadingMore(false)
-    }
-  }, [selectedCategory, selectedTag, searchQuery, page])
+    },
+    [selectedCategory, selectedTag, searchQuery, page]
+  );
 
   const fetchFeaturedBlogs = async () => {
     try {
-      const response = await blogAPI.getAll({ featured: 'true', limit: 3 })
+      const response = await blogAPI.getAll({ featured: "true", limit: 3 });
       if (response.data.success) {
-        setFeaturedBlogs(response.data.data)
+        setFeaturedBlogs(response.data.data);
       }
     } catch (err) {
-      console.error('Error fetching featured blogs:', err)
+      console.error("Error fetching featured blogs:", err);
     }
-  }
+  };
 
   const fetchCategories = async () => {
     try {
-      const response = await blogAPI.getCategories()
+      const response = await blogAPI.getCategories();
       if (response.data.success) {
-        setCategories(['all', ...response.data.data])
+        setCategories(["all", ...response.data.data]);
       }
     } catch (err) {
-      console.error('Error fetching categories:', err)
+      console.error("Error fetching categories:", err);
     }
-  }
+  };
 
   const fetchTags = async () => {
     try {
-      const response = await blogAPI.getTags()
+      const response = await blogAPI.getTags();
       if (response.data.success) {
-        setTags(response.data.data)
+        setTags(response.data.data);
       }
     } catch (err) {
-      console.error('Error fetching tags:', err)
+      console.error("Error fetching tags:", err);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchBlogs(true)
-  }, [selectedCategory, selectedTag, searchQuery, fetchBlogs])
+    fetchBlogs(true);
+  }, [selectedCategory, selectedTag, searchQuery, fetchBlogs]);
 
   useEffect(() => {
-    fetchFeaturedBlogs()
-    fetchCategories()
-    fetchTags()
-  }, [])
+    fetchFeaturedBlogs();
+    fetchCategories();
+    fetchTags();
+  }, []);
 
   const handleCategoryChange = (category) => {
-    setSelectedCategory(category)
-    setSelectedTag('')
-  }
+    setSelectedCategory(category);
+    setSelectedTag("");
+  };
 
   const handleTagChange = (tag) => {
-    setSelectedTag(tag)
-    setSelectedCategory('all')
-  }
+    setSelectedTag(tag);
+    setSelectedCategory("all");
+  };
 
   const handleSearch = (e) => {
-    e.preventDefault()
-    fetchBlogs(true)
-  }
+    e.preventDefault();
+    fetchBlogs(true);
+  };
 
   const loadMore = () => {
     if (!loadingMore && hasMore) {
-      fetchBlogs(false)
+      fetchBlogs(false);
     }
-  }
+  };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })
-  }
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
-  }
+        staggerChildren: 0.1,
+      },
+    },
+  };
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
@@ -159,17 +162,20 @@ const Blog = () => {
       y: 0,
       opacity: 1,
       transition: {
-        duration: 0.5
-      }
-    }
-  }
+        duration: 0.5,
+      },
+    },
+  };
 
   if (loading) {
     return (
       <>
         <Helmet>
           <title>Blog - PR Agency</title>
-          <meta name="description" content="Read our latest insights on PR strategies, digital marketing, and industry trends." />
+          <meta
+            name="description"
+            content="Read our latest insights on PR strategies, digital marketing, and industry trends."
+          />
         </Helmet>
         <Header />
         <div className="min-h-screen flex items-center justify-center">
@@ -177,7 +183,7 @@ const Blog = () => {
         </div>
         <Footer />
       </>
-    )
+    );
   }
 
   if (error) {
@@ -191,7 +197,7 @@ const Blog = () => {
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Oops!</h2>
             <p className="text-gray-600">{error}</p>
-            <button 
+            <button
               onClick={() => fetchBlogs(true)}
               className="mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
@@ -201,21 +207,27 @@ const Blog = () => {
         </div>
         <Footer />
       </>
-    )
+    );
   }
 
   return (
     <>
       <Helmet>
         <title>Blog - PR Agency</title>
-        <meta name="description" content="Read our latest insights on PR strategies, digital marketing, and industry trends." />
+        <meta
+          name="description"
+          content="Read our latest insights on PR strategies, digital marketing, and industry trends."
+        />
         <meta property="og:title" content="Blog - PR Agency" />
-        <meta property="og:description" content="Read our latest insights on PR strategies, digital marketing, and industry trends." />
+        <meta
+          property="og:description"
+          content="Read our latest insights on PR strategies, digital marketing, and industry trends."
+        />
         <meta property="og:type" content="website" />
       </Helmet>
 
       <Header />
-      
+
       <main className="pt-20">
         {/* Hero Section */}
         <section className="bg-gradient-to-br from-gray-900 to-gray-800 text-white py-20">
@@ -228,9 +240,10 @@ const Blog = () => {
             >
               <h1 className="text-5xl font-bold mb-6">Blog</h1>
               <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
-                Insights, strategies, and trends shaping the world of public relations
+                Insights, strategies, and trends shaping the world of public
+                relations
               </p>
-              
+
               {/* Search Bar */}
               <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
                 <div className="flex gap-4">
@@ -267,7 +280,7 @@ const Blog = () => {
               >
                 Featured Posts
               </motion.h2>
-              
+
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {featuredBlogs.map((blog, index) => (
                   <motion.div
@@ -293,7 +306,7 @@ const Blog = () => {
                             </span>
                           </div>
                         </div>
-                        
+
                         <div className="p-6">
                           <div className="flex items-center justify-between mb-3">
                             <span className="text-sm text-blue-600 font-medium">
@@ -303,11 +316,11 @@ const Blog = () => {
                               {blog.readTime} min read
                             </span>
                           </div>
-                          
+
                           <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
                             {blog.title}
                           </h3>
-                          
+
                           <p className="text-gray-600 line-clamp-3 mb-4">
                             {blog.excerpt}
                           </p>
@@ -344,8 +357,8 @@ const Blog = () => {
                     whileTap={{ scale: 0.95 }}
                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                       selectedCategory === category
-                        ? 'bg-blue-600 text-white shadow-lg'
-                        : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
+                        ? "bg-blue-600 text-white shadow-lg"
+                        : "bg-white text-gray-700 hover:bg-gray-100 border border-gray-300"
                     }`}
                   >
                     {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -358,13 +371,15 @@ const Blog = () => {
                 {tags.slice(0, 5).map((tag) => (
                   <motion.button
                     key={tag}
-                    onClick={() => handleTagChange(selectedTag === tag ? '' : tag)}
+                    onClick={() =>
+                      handleTagChange(selectedTag === tag ? "" : tag)
+                    }
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
                       selectedTag === tag
-                        ? 'bg-gray-800 text-white shadow-lg'
-                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                        ? "bg-gray-800 text-white shadow-lg"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                     }`}
                   >
                     #{tag}
@@ -402,7 +417,7 @@ const Blog = () => {
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                           />
                         </div>
-                        
+
                         <div className="p-6">
                           <div className="flex items-center justify-between mb-3">
                             <span className="text-sm text-blue-600 font-medium">
@@ -412,11 +427,11 @@ const Blog = () => {
                               {blog.readTime} min read
                             </span>
                           </div>
-                          
+
                           <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
                             {blog.title}
                           </h3>
-                          
+
                           <p className="text-gray-600 line-clamp-3 mb-4">
                             {blog.excerpt}
                           </p>
@@ -439,7 +454,9 @@ const Blog = () => {
 
             {blogs.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">No blog posts found matching your criteria.</p>
+                <p className="text-gray-500 text-lg">
+                  No blog posts found matching your criteria.
+                </p>
               </div>
             )}
 
@@ -455,14 +472,30 @@ const Blog = () => {
                 >
                   {loadingMore ? (
                     <span className="flex items-center">
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      <svg
+                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
                       </svg>
                       Loading...
                     </span>
                   ) : (
-                    'Load More'
+                    "Load More"
                   )}
                 </motion.button>
               </div>
@@ -473,7 +506,7 @@ const Blog = () => {
 
       <Footer />
     </>
-  )
-}
+  );
+};
 
-export default Blog
+export default Blog;

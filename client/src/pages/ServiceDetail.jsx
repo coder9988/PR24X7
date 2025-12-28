@@ -1,71 +1,71 @@
-import { useState, useEffect } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import { Helmet } from 'react-helmet-async'
-import { servicesAPI, blogAPI, testAPI } from '../services/api'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
+import { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
+import { servicesAPI, blogAPI, testAPI } from "../services/api";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const ServiceDetail = () => {
-  const { slug } = useParams()
-  const navigate = useNavigate()
-  const [service, setService] = useState(null)
-  const [relatedBlogs, setRelatedBlogs] = useState([])
-  const [blogsLoading, setBlogsLoading] = useState(true)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const { slug } = useParams();
+  const navigate = useNavigate();
+  const [service, setService] = useState(null);
+  const [relatedBlogs, setRelatedBlogs] = useState([]);
+  const [blogsLoading, setBlogsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetchService()
-  }, [slug])
+    fetchService();
+  }, [slug]);
 
   useEffect(() => {
     if (service) {
-      fetchRelatedBlogs()
+      fetchRelatedBlogs();
     }
-  }, [service])
+  }, [service]);
 
   const fetchRelatedBlogs = async () => {
     try {
-      setBlogsLoading(true)
-      console.log('Fetching blogs for service slug:', slug)
-      
+      setBlogsLoading(true);
+      console.log("Fetching blogs for service slug:", slug);
+
       // Try the regular API with shorter timeout
-      const response = await blogAPI.getByService(slug, { limit: 3 })
-      console.log('Blog API response:', response)
-      
+      const response = await blogAPI.getByService(slug, { limit: 3 });
+      console.log("Blog API response:", response);
+
       if (response.data && response.data.success) {
-        setRelatedBlogs(response.data.data || [])
-        console.log('Related blogs set:', response.data.data)
+        setRelatedBlogs(response.data.data || []);
+        console.log("Related blogs set:", response.data.data);
       } else {
-        console.log('API response not successful:', response)
-        setRelatedBlogs([])
+        console.log("API response not successful:", response);
+        setRelatedBlogs([]);
       }
     } catch (err) {
-      console.error('Error fetching related blogs:', err)
+      console.error("Error fetching related blogs:", err);
       // Set empty array on error to avoid infinite loading
-      setRelatedBlogs([])
+      setRelatedBlogs([]);
     } finally {
-      setBlogsLoading(false)
+      setBlogsLoading(false);
     }
-  }
+  };
 
   const fetchService = async () => {
     try {
-      setLoading(true)
-      const response = await servicesAPI.getBySlug(slug)
+      setLoading(true);
+      const response = await servicesAPI.getBySlug(slug);
       if (response.data.success) {
-        setService(response.data.data)
+        setService(response.data.data);
       } else {
-        setError('Service not found')
+        setError("Service not found");
       }
     } catch (err) {
-      setError('Failed to load service')
-      console.error('Error fetching service:', err)
+      setError("Failed to load service");
+      console.error("Error fetching service:", err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -73,19 +73,19 @@ const ServiceDetail = () => {
       opacity: 1,
       transition: {
         duration: 0.6,
-        staggerChildren: 0.2
-      }
-    }
-  }
+        staggerChildren: 0.2,
+      },
+    },
+  };
 
   const itemVariants = {
     hidden: { y: 30, opacity: 0 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.6 }
-    }
-  }
+      transition: { duration: 0.6 },
+    },
+  };
 
   if (loading) {
     return (
@@ -99,7 +99,7 @@ const ServiceDetail = () => {
         </div>
         <Footer />
       </>
-    )
+    );
   }
 
   if (error || !service) {
@@ -111,17 +111,21 @@ const ServiceDetail = () => {
         <Header />
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">Service Not Found</h2>
-            <p className="text-gray-600 mb-8">The service you're looking for doesn't exist or has been removed.</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Service Not Found
+            </h2>
+            <p className="text-gray-600 mb-8">
+              The service you're looking for doesn't exist or has been removed.
+            </p>
             <div className="space-x-4">
-              <button 
-                onClick={() => navigate('/services')}
+              <button
+                onClick={() => navigate("/services")}
                 className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
               >
                 View All Services
               </button>
-              <button 
-                onClick={() => navigate('/')}
+              <button
+                onClick={() => navigate("/")}
                 className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
               >
                 Go Home
@@ -131,7 +135,7 @@ const ServiceDetail = () => {
         </div>
         <Footer />
       </>
-    )
+    );
   }
 
   return (
@@ -145,17 +149,23 @@ const ServiceDetail = () => {
       </Helmet>
 
       <Header />
-      
+
       <main className="pt-20">
         {/* Breadcrumb */}
         <section className="bg-gray-50 py-4">
           <div className="container mx-auto px-6">
             <nav className="flex items-center space-x-2 text-sm">
-              <Link to="/" className="text-gray-500 hover:text-gray-700 transition-colors">
+              <Link
+                to="/"
+                className="text-gray-500 hover:text-gray-700 transition-colors"
+              >
                 Home
               </Link>
               <span className="text-gray-400">/</span>
-              <Link to="/services" className="text-gray-500 hover:text-gray-700 transition-colors">
+              <Link
+                to="/services"
+                className="text-gray-500 hover:text-gray-700 transition-colors"
+              >
                 Services
               </Link>
               <span className="text-gray-400">/</span>
@@ -178,13 +188,13 @@ const ServiceDetail = () => {
                   <span className="text-4xl">{service.icon}</span>
                 </div>
               </motion.div>
-              <motion.h1 
+              <motion.h1
                 variants={itemVariants}
                 className="text-5xl font-bold mb-6"
               >
                 {service.title}
               </motion.h1>
-              <motion.p 
+              <motion.p
                 variants={itemVariants}
                 className="text-xl text-gray-300 leading-relaxed"
               >
@@ -205,13 +215,13 @@ const ServiceDetail = () => {
                 viewport={{ once: true }}
                 className="max-w-4xl mx-auto"
               >
-                <motion.h2 
+                <motion.h2
                   variants={itemVariants}
                   className="text-3xl font-bold text-center text-gray-900 mb-12"
                 >
                   What We Offer
                 </motion.h2>
-                <motion.div 
+                <motion.div
                   variants={itemVariants}
                   className="grid grid-cols-1 md:grid-cols-2 gap-6"
                 >
@@ -223,8 +233,16 @@ const ServiceDetail = () => {
                       className="flex items-start space-x-4 p-4 rounded-lg hover:bg-gray-50 transition-colors"
                     >
                       <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-                        <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        <svg
+                          className="w-4 h-4 text-white"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                       </div>
                       <p className="text-gray-700">{feature}</p>
@@ -250,16 +268,17 @@ const ServiceDetail = () => {
                 Ready to Get Started?
               </h2>
               <p className="text-xl text-blue-100 mb-8">
-                Let's discuss how our {service.title} service can help your business grow.
+                Let's discuss how our {service.title} service can help your
+                business grow.
               </p>
               <div className="space-x-4">
-                <Link 
+                <Link
                   to="/contact"
                   className="inline-block px-8 py-4 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors"
                 >
                   Contact Us
                 </Link>
-                <Link 
+                <Link
                   to="/services"
                   className="inline-block px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-600 transition-all"
                 >
@@ -281,13 +300,13 @@ const ServiceDetail = () => {
                 viewport={{ once: true }}
                 className="max-w-4xl mx-auto"
               >
-                <motion.h2 
+                <motion.h2
                   variants={itemVariants}
                   className="text-3xl font-bold text-center text-gray-900 mb-12"
                 >
                   Related Articles & Insights
                 </motion.h2>
-                <motion.div 
+                <motion.div
                   variants={itemVariants}
                   className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
                 >
@@ -316,21 +335,24 @@ const ServiceDetail = () => {
                         <div className="p-6">
                           <div className="flex items-center justify-between mb-3">
                             <span className="text-xs text-gray-500 font-medium">
-                              {new Date(blog.publishedAt).toLocaleDateString('en-US', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric'
-                              })}
+                              {new Date(blog.publishedAt).toLocaleDateString(
+                                "en-US",
+                                {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "numeric",
+                                }
+                              )}
                             </span>
                             <span className="text-xs text-gray-500">
                               {blog.readTime} min read
                             </span>
                           </div>
-                          
+
                           <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
                             {blog.title}
                           </h3>
-                          
+
                           <p className="text-gray-600 text-sm line-clamp-3 mb-4">
                             {blog.excerpt}
                           </p>
@@ -357,7 +379,9 @@ const ServiceDetail = () => {
 
                 {!blogsLoading && relatedBlogs.length === 0 && (
                   <div className="text-center py-8">
-                    <p className="text-gray-500">No related articles found for this service.</p>
+                    <p className="text-gray-500">
+                      No related articles found for this service.
+                    </p>
                   </div>
                 )}
               </motion.div>
@@ -368,7 +392,7 @@ const ServiceDetail = () => {
 
       <Footer />
     </>
-  )
-}
+  );
+};
 
-export default ServiceDetail
+export default ServiceDetail;
