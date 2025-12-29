@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { Link, X } from "lucide-react";
 import { useUI } from "../context/UIContext";
 import { useAuth } from "../context/AuthContext";
 import LoginForm from "./LoginForm";
@@ -41,7 +41,7 @@ const GetStartedModal = () => {
             <div className="space-y-4 text-center">
               <h2 className="text-2xl font-bold">Get Started</h2>
               <p className="text-gray-600">What would you like to do?</p>
-
+              {/* <Link to = "/contact"></Link> */}
               <button
                 onClick={() => {
                   closeGetStarted();

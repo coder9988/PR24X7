@@ -245,7 +245,7 @@ const ServiceDetail = () => {
                           />
                         </svg>
                       </div>
-                      <p className="text-gray-700">{feature}</p>
+                      <p className="text-gray-700">{feature.description}</p>
                     </motion.div>
                   ))}
                 </motion.div>

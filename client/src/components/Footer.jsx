@@ -9,10 +9,10 @@ import {
   Phone,
   MapPin,
 } from "lucide-react";
-import Contact from "./Contact.jsx";
-<Routes>
-  <Route path="/contact" element={<Contact />} />
-</Routes>;
+// import Contact from "./Contact.jsx";
+// <Routes>
+//   <Route path="/contact" element={<Contact />} />
+// </Routes>;
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -167,7 +167,7 @@ const Footer = () => {
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-primary-400 flex-shrink-0 mt-0.5" />
-                <span>Mumbai, Maharashta, India</span>
+                <span>Jalandhar, Punjab, India</span>
               </li>
             </ul>
           </motion.div>

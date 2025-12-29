@@ -15,31 +15,31 @@ const MediaCoverage = () => {
     },
     {
       name: "Reliance Industries",
-      logo: "https://logo.clearbit.com/ril.com",
+      logo: "img/media/reliance.jpg",
       description: "Large-scale business and industry leadership coverage.",
       link: "https://www.ril.com",
     },
     {
       name: "Infosys",
-      logo: "https://logo.clearbit.com/infosys.com",
+      logo: "img/media/infosys.jpg",
       description: "Global IT services and digital transformation stories.",
       link: "https://www.infosys.com",
     },
     {
       name: "Wipro",
-      logo: "https://logo.clearbit.com/wipro.com",
+      logo: "img/media/wipro.jpg",
       description: "Enterprise technology and innovation visibility.",
       link: "https://www.wipro.com",
     },
     {
       name: "Flipkart",
-      logo: "https://logo.clearbit.com/flipkart.com",
+      logo: "img/media/flipkart.jpg",
       description: "E-commerce growth and consumer market coverage.",
       link: "https://www.flipkart.com",
     },
     {
       name: "Zomato",
-      logo: "https://logo.clearbit.com/zomato.com",
+      logo: "img/media/zomato.png",
       description: "Digital-first branding and consumer engagement campaigns.",
       link: "https://www.zomato.com",
     },
@@ -101,14 +101,15 @@ const MediaCoverage = () => {
               whileHover={{ y: -8, scale: 1.02 }}
               className="group relative bg-gray-50 rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-gray-100"
             >
-              <div className="p-8">
-                <div className="h-20 mb-6 flex items-center justify-center">
+              <div className="p-6">
+                <div className="h-24 w-full mb-6 overflow-hidden rounded-lg">
                   <img
                     src={outlet.logo}
                     alt={outlet.name}
-                    className="max-h-full max-w-full object-contain grayscale group-hover:grayscale-0 transition-all duration-300"
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
                   />
                 </div>
+
                 <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary-600 transition-colors">
                   {outlet.name}
                 </h3>

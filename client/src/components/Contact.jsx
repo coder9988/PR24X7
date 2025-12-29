@@ -93,7 +93,7 @@ const Contact = () => {
     {
       icon: MapPin,
       title: "Address",
-      content: "Mumbai, Maharashtra, India",
+      content: "Jalandhar, Punjab, India",
       link: "#",
     },
   ];

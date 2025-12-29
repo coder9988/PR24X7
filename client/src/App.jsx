@@ -14,6 +14,7 @@ import Signup from "./pages/Signup";
 import GetStartedModal from "./components/GetStartedModal";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./routes/PrivateRoute";
+import Contact from "./pages/Contact";
 import "./App.css";
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
         <Route path="/media" element={<Media />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:slug" element={<BlogDetail />} />
-
+        <Route path="/contact" element={<Contact />} />
         {/* ✅ PROTECTED ADMIN ROUTE */}
         <Route
           path="/admin"
